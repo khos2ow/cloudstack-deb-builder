@@ -43,7 +43,8 @@ RUN apt-get update -y && \
     apt-get clean && \
     apt-get purge -y software-properties-common && \
     apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 
