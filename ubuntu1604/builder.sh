@@ -18,6 +18,16 @@
 
 set -e
 
+# Adjust user and group provided by host
+adjust_owner() {
+    # if both set then change the owner
+    if [ -n "${USER_ID}" -a -z "${USER_GID}" ]; then
+        chown -R ${USER_ID} /mnt/build/cloudstack
+    elif [ -n "${USER_ID}" -a -n "${USER_GID}" ]; then
+        chown -R ${USER_ID}:${USER_GID} /mnt/build/cloudstack
+    fi
+}
+
 if [ ! -d "/mnt/build/cloudstack" ]; then
     echo "Could not find directory 'cloudstack'"
     exit 1
@@ -36,7 +46,10 @@ if [ $? -eq 0 ]; then
 
     cp /mnt/build/cloudstack-*.deb /mnt/build/cloudstack/dist/debbuild/DEBS
     cp /mnt/build/cloudstack_*.changes /mnt/build/cloudstack/dist/debbuild/DEBS
+
+    adjust_owner
 else
+    adjust_owner
     echo "Packaging DEB failed"
     exit 1
 fi

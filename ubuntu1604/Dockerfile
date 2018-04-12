@@ -16,7 +16,7 @@
 # under the License.
 
 FROM ubuntu:16.04
-MAINTAINER Khosrow Moossavi <kmoossavi@cloudops.com>
+MAINTAINER Khosrow Moossavi <me@khosrow.io>
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
