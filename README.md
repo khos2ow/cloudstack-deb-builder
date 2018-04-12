@@ -6,17 +6,17 @@ This will give portable, immutable and reproducable mechanism to build packages 
 
 ## Table of Contents
 
-- [Supported tags and respective `Dockerfile` links](https://github.com/khos2ow/cloudstack-deb-builder#supported-tags-and-respective-dockerfile-links)
-- [Packges installed in conatiner](https://github.com/khos2ow/cloudstack-deb-builder#packges-installed-in-conatiner)
-- [Build DEB packages](https://github.com/khos2ow/cloudstack-deb-builder#build-deb-packages)
-  - [Clone Apache CloudStack source code](https://github.com/khos2ow/cloudstack-deb-builder#clone-apache-cloudstack-source-code)
-  - [Pull Docker images](https://github.com/khos2ow/cloudstack-deb-builder#pull-docker-images)
-  - [Build packages](https://github.com/khos2ow/cloudstack-deb-builder#build-packages)
-- [Building tips](https://github.com/khos2ow/cloudstack-deb-builder#building-tips)
-  - [Maven cache](https://github.com/khos2ow/cloudstack-deb-builder#maven-cache)
-  - [Adjust host owner permission](https://github.com/khos2ow/cloudstack-deb-builder#adjust-host-owner-permission)
-- [Builder help](https://github.com/khos2ow/cloudstack-deb-builder#builder-help)
-- [License](https://github.com/khos2ow/cloudstack-deb-builder#license)
+- [Supported tags and respective `Dockerfile` links](#supported-tags-and-respective-dockerfile-links)
+- [Packges installed in conatiner](#packges-installed-in-conatiner)
+- [Build DEB packages](#build-deb-packages)
+  - [Clone Apache CloudStack source code](#clone-apache-cloudstack-source-code)
+  - [Pull Docker images](#pull-docker-images)
+  - [Build packages](#build-packages)
+- [Building tips](#building-tips)
+  - [Maven cache](#maven-cache)
+  - [Adjust host owner permission](#adjust-host-owner-permission)
+- [Builder help](#builder-help)
+- [License](#license)
 
 ## Supported tags and respective `Dockerfile` links
 
