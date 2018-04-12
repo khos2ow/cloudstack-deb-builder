@@ -16,6 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+set -e
+
 # Adjust user and group provided by host
 adjust_owner() {
     # if both set then change the owner
@@ -36,18 +38,20 @@ if [ ! -f "/mnt/build/cloudstack/packaging/build-deb.sh" ]; then
     exit 1
 fi
 
-# do the packaging
-bash -x /mnt/build/cloudstack/packaging/build-deb.sh $@
+{
+    # do the packaging
+    bash -x /mnt/build/cloudstack/packaging/build-deb.sh $@ && {
+        mkdir -p /mnt/build/cloudstack/dist/debbuild/DEBS
 
-if [ $? -eq 0 ]; then
-    mkdir -p /mnt/build/cloudstack/dist/debbuild/DEBS
+        cp /mnt/build/cloudstack-*.deb /mnt/build/cloudstack/dist/debbuild/DEBS
+        cp /mnt/build/cloudstack_*.changes /mnt/build/cloudstack/dist/debbuild/DEBS
 
-    cp /mnt/build/cloudstack-*.deb /mnt/build/cloudstack/dist/debbuild/DEBS
-    cp /mnt/build/cloudstack_*.changes /mnt/build/cloudstack/dist/debbuild/DEBS
+        adjust_owner
+    }
+} || {
+    status=$?
 
-    adjust_owner
-else
     adjust_owner
     echo "Packaging DEB failed"
-    exit $?
-fi
+    exit $status
+}
