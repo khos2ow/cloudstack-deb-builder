@@ -16,7 +16,7 @@
 # under the License.
 
 FROM ubuntu:14.04
-MAINTAINER Khosrow Moossavi <me@khosrow.io>
+LABEL maintainer="Khosrow Moossavi <me@khosrow.io> (@khos2ow)"
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends software-properties-common && \
