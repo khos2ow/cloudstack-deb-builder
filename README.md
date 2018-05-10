@@ -86,7 +86,7 @@ After the build has finished the *.deb* packages are available in */tmp/cloudsta
 
 ### Build remote repository
 
-Also you can build RPM packages of any remote repository without the need to manually clone it first. You only need to specify git remote and git ref you intend to build from.
+Also you can build DEB packages of any remote repository without the need to manually clone it first. You only need to specify git remote and git ref you intend to build from.
 
 #### Build packages of remote repository
 
