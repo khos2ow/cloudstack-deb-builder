@@ -17,13 +17,21 @@
 
 .PHONY: all ubuntu1404 ubuntu1604 latest
 
+# Build docker tag based on provided info
+#
+# $1: tag_name
+# $2: directory_name
+define build_tag
+	docker build -t khos2ow/cloudstack-deb-builder:$(1) $(2)
+endef
+
 all: ubuntu1404 ubuntu1604 latest
 
 ubuntu1404:
-	docker build -t khos2ow/cloudstack-deb-builder:ubuntu1404 ubuntu1404/
+	$(call build_tag,ubuntu1404,ubuntu1404)
 
 ubuntu1604:
-	docker build -t khos2ow/cloudstack-deb-builder:ubuntu1604 ubuntu1604/
+	$(call build_tag,ubuntu1604,ubuntu1604)
 
 latest:
-	docker build -t khos2ow/cloudstack-deb-builder:latest ubuntu1604/
+	$(call build_tag,latest,ubuntu1604)
