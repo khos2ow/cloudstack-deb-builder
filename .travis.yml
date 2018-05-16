@@ -37,6 +37,7 @@ env:
   matrix:
     - TAG="ubuntu1404" PARAMS=""
     - TAG="ubuntu1604" PARAMS=""
+    - TAG="ubuntu1804" PARAMS=""
     - TAG="latest"  PARAMS=""
 
 install: make ${TAG}
