@@ -37,4 +37,4 @@ ubuntu1804:
 	$(call build_tag,ubuntu1804,ubuntu1804)
 
 latest:
-	$(call build_tag,latest,ubuntu1604)
+	$(call build_tag,latest,ubuntu1804)
