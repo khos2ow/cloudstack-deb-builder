@@ -1,5 +1,10 @@
 # CloudStack DEB Package builder using Docker
 
+[![Build Status](https://travis-ci.com/khos2ow/cloudstack-deb-builder.svg?branch=master)](https://travis-ci.com/khos2ow/cloudstack-deb-builder)
+[![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-deb-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-deb-builder/)
+[![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-deb-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-deb-builder/builds/)
+[![license](https://img.shields.io/github/license/khos2ow/cloudstack-deb-builder.svg)](https://github.com/khos2ow/cloudstack-deb-builder/blob/master/LICENSE)
+
 Docker images for building Apache CloudStack DEB packages.
 
 This will give portable, immutable and reproducable mechanism to build packages for releases. A very good candidate to be used by the Jenkins slaves of the project.
