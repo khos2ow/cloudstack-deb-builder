@@ -21,6 +21,9 @@ set -e
 # Flag to show help text
 show_help=false
 
+# Workspace path
+workspace_path=""
+
 # Using remote git repository variables
 use_remote=false
 git_remote=""
@@ -65,6 +68,16 @@ while [ -n "$1" ]; do
             fi
             ;;
 
+        --workspace-path)
+            if [ -n "$workspace_path" ]; then
+                echo "Error: you have already entered value for --workspace-path"
+                exit 1
+            else
+                workspace_path=$2
+                shift 2
+            fi
+            ;;
+
         -h | --help)
             if [ $show_help = true ]; then
                 echo "Error: you have already entered -h, --help"
@@ -85,6 +98,11 @@ done
 
 set -- $PKG_ARGS
 
+# use '/mnt/build/cloudstack' as default workspace path
+if [ -z "$workspace_path" ]; then
+    workspace_path="/mnt/build/cloudstack"
+fi
+
 # Both of --git-remote AND --git-ref must be specified at the same time
 if [ $use_remote = true ]; then
     if [ -z "$git_remote" -o -z "$git_ref" ]; then
@@ -99,20 +117,20 @@ fi
 #   2) cloudstack directory is NOT provided and git remote and ref are provided
 #
 # Any combination of the above situations is invalid.
-if [ -d "/mnt/build/cloudstack" ]; then
+if [ -d "${workspace_path}" ]; then
     if [ $use_remote = true ]; then
         if [ $remove_first = false ]; then
-            echo "Error: Could not clone remote git repository, '/mnt/build/cloudstack' exists"
+            echo "Error: Could not clone remote git repository, '${workspace_path}' exists"
             exit 1
         else
-            echo "Removing /mnt/build/cloudstack ..."
-            rm -rf /mnt/build/cloudstack
+            echo "Removing ${workspace_path} ..."
+            rm -rf ${workspace_path}
             echo -e "\n--------\n"
         fi
     fi
 else
     if [ $use_remote = false ]; then
-        echo "Could not find '/mnt/build/cloudstack'"
+        echo "Could not find '${workspace_path}'"
         exit 1
     fi
 fi
@@ -156,9 +174,9 @@ echo -e "\n--------\n"
 # Clone the remote provided git repo and ref
 if [ $use_remote = true ]; then
     echo "Cloning $git_remote ..."
-    git clone --quiet --depth=50 $git_remote /mnt/build/cloudstack
+    git clone --quiet --depth=50 $git_remote ${workspace_path}
 
-    cd /mnt/build/cloudstack
+    cd ${workspace_path}
 
     echo "Fetching $git_ref ..."
     git fetch --quiet origin +$git_ref:
@@ -170,14 +188,14 @@ if [ $use_remote = true ]; then
 fi
 
 # Make sure build-deb.sh script exists before going any further
-if [ ! -f "/mnt/build/cloudstack/packaging/build-deb.sh" ]; then
-    echo "Could not find '/mnt/build/cloudstack/packaging/build-deb.sh'"
+if [ ! -f "${workspace_path}/packaging/build-deb.sh" ]; then
+    echo "Could not find '${workspace_path}/packaging/build-deb.sh'"
     exit 1
 fi
 
 # convert LONG flags to SHORT flags for anything prior 4.12.x.x
 echo "Detecting CloudStack version ..."
-pom_version=$(cd /mnt/build/cloudstack; mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
+pom_version=$(cd ${workspace_path}; mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
 echo "${pom_version}"
 major_version=$(echo ${pom_version} | cut -d. -f1)
 minor_version=$(echo ${pom_version} | cut -d. -f2)
@@ -189,10 +207,10 @@ if [ $major_version -lt 4 ] || [ $major_version -eq 4 -a $minor_version -lt 12 ]
     fi
 fi
 
-# Show help, both from docker-entrypoint.sh and /mnt/build/cloudstack/packaging/build-deb.sh
+# Show help, both from docker-entrypoint.sh and ${workspace_path}/packaging/build-deb.sh
 if [ $show_help = true ]; then
     if [ -n "$HELP_ARG" ]; then
-        help=$(cd /mnt/build/cloudstack/packaging; bash -x ./build-deb.sh $HELP_ARG)
+        help=$(cd ${workspace_path}/packaging; bash -x ./build-deb.sh $HELP_ARG)
     else
         help=""
     fi
@@ -205,7 +223,8 @@ packaging script on in.
 Optional arguments:
    --git-remote string                     Set the git remote repository to clone (must be set together with \`--git-ref\`) (default: none)
    --git-ref string                        Set the ref from remote repository to check out (must be set together with \`--git-remote\`) (default: none)
-   --remove-first                          Remove existing \`/mnt/build/cloudstack\` directory before cloning (default: false)
+   --remove-first                          Remove existing \`${workspace_path}\` directory before cloning (default: false)
+   --workspace-path string                 Set the directory path of workspace to work with (default: \`/mnt/build/cloudstack\`)
 
 Other arguments:
    -h, --help                              Display this help message and exit
@@ -226,21 +245,21 @@ fi
 function adjust_owner() {
     # if both set then change the owner
     if [ -n "${USER_ID}" -a -z "${USER_GID}" ]; then
-        chown -R ${USER_ID} /mnt/build/cloudstack
+        chown -R ${USER_ID} ${workspace_path}
     elif [ -n "${USER_ID}" -a -n "${USER_GID}" ]; then
-        chown -R ${USER_ID}:${USER_GID} /mnt/build/cloudstack
+        chown -R ${USER_ID}:${USER_GID} ${workspace_path}
     fi
 }
 
 {
-    cd /mnt/build/cloudstack/packaging
+    cd ${workspace_path}/packaging
 
     # do the packaging
     bash -x ./build-deb.sh $@ && {
-        mkdir -p /mnt/build/cloudstack/dist/debbuild/DEBS
+        mkdir -p ${workspace_path}/dist/debbuild/DEBS
 
-        cp /mnt/build/cloudstack-*.deb /mnt/build/cloudstack/dist/debbuild/DEBS
-        cp /mnt/build/cloudstack_*.changes /mnt/build/cloudstack/dist/debbuild/DEBS
+        cp ${workspace_path}/../cloudstack-*.deb ${workspace_path}/dist/debbuild/DEBS
+        cp ${workspace_path}/../cloudstack_*.changes ${workspace_path}/dist/debbuild/DEBS
 
         adjust_owner
     }
