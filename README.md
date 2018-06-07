@@ -28,7 +28,8 @@ This will give portable, immutable and reproducable mechanism to build packages 
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest`, `ubuntu1604` (ubuntu1604/Dockerfile)](https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1604/Dockerfile)
+- [`latest`, `ubuntu1804` (ubuntu1804/Dockerfile)](https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1804/Dockerfile)
+- [`ubuntu1604` (ubuntu1604/Dockerfile)](https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1604/Dockerfile)
 - [`ubuntu1404` (ubuntu1404/Dockerfile)](https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1404/Dockerfile)
 
 ## Packges installed in conatiner
@@ -59,7 +60,7 @@ Let's assume we want to build packages for Ubuntu 16.04 (Xenial). We pull that i
 
     docker pull khos2ow/cloudstack-deb-builder:ubuntu1604
 
-You can replace `ubuntu1604` tag by `ubuntu1404` or `latest` if you want.
+You can replace `ubuntu1604` tag by `ubuntu1804`, `ubuntu1404` or `latest` if you want.
 
 ### Build local repository
 
