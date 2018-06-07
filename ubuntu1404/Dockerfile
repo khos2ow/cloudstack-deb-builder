@@ -52,4 +52,6 @@ VOLUME /mnt/build
 WORKDIR /mnt/build
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY environment-info.sh /usr/local/bin/environment-info.sh
+
 ENTRYPOINT ["docker-entrypoint.sh"]

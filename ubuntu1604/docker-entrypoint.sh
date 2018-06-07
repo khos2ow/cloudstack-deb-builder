@@ -136,38 +136,7 @@ else
 fi
 
 # Print out some environment information
-echo -e "System information:"
-cat /etc/*-release
-
-echo -e "\nGit version:"
-git --version
-
-echo -e "\nJava version:"
-java -version
-
-echo -e "\nMaven version:"
-mvn --version
-
-echo -e "\nPython version:"
-python --version
-
-echo -e "\ndpkg version:"
-dpkg --version
-
-echo -e "\ndevscripts version:"
-dpkg -s devscripts | grep "Version:" | awk '{print $2}'
-
-echo -e "\ndebhelper version:"
-dpkg -s debhelper | grep "Version:" | awk '{print $2}'
-
-echo -e "\ngenisoimage version:"
-genisoimage --version
-
-echo -e "\nlsb-release version:"
-dpkg -s lsb-release | grep "Version:" | awk '{print $2}'
-
-echo -e "\nbuild-essential version:"
-dpkg -s build-essential | grep "Version:" | awk '{print $2}'
+environment-info.sh
 
 echo -e "\n--------\n"
 
