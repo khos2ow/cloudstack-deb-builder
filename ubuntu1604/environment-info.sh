@@ -18,35 +18,51 @@
 
 set -e
 
-echo -e "System information:"
+EXTRA_LINE=""
+
+print_title() {
+    local version_label=""
+    if [[ "$1" = *":" ]]; then
+        version_label=""
+    else
+        version_label=" version:"
+    fi
+    echo -e "${EXTRA_LINE}\e[1;34m$1${version_label}\e[0m"
+}
+
+print_title "system information:"
 cat /etc/*-release
 
-echo -e "\nGit version:"
+EXTRA_LINE="\n"
+
+print_title "git"
 git --version
 
-echo -e "\nJava version:"
+print_title "java"
 java -version
 
-echo -e "\nMaven version:"
+print_title "maven"
 mvn --version
 
-echo -e "\nPython version:"
+print_title "python"
 python --version
 
-echo -e "\ndpkg version:"
+print_title "dpkg"
 dpkg --version
 
-echo -e "\ndevscripts version:"
+print_title "devscripts"
 dpkg -s devscripts | grep "Version:" | awk '{print $2}'
 
-echo -e "\ndebhelper version:"
+print_title "debhelper"
 dpkg -s debhelper | grep "Version:" | awk '{print $2}'
 
-echo -e "\ngenisoimage version:"
+print_title "genisoimage"
 genisoimage --version
 
-echo -e "\nlsb-release version:"
+print_title "lsb-release"
 dpkg -s lsb-release | grep "Version:" | awk '{print $2}'
 
-echo -e "\nbuild-essential version:"
+print_title "build-essential"
 dpkg -s build-essential | grep "Version:" | awk '{print $2}'
+
+echo ""

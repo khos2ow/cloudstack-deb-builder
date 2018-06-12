@@ -123,9 +123,9 @@ if [ -d "${workspace_path}" ]; then
             echo "Error: Could not clone remote git repository, '${workspace_path}' exists"
             exit 1
         else
-            echo "Removing ${workspace_path} ..."
+            echo -e "\e[0;32mremoving ${workspace_path} ...\e[0m"
             rm -rf ${workspace_path}
-            echo -e "\n--------\n"
+            echo ""
         fi
     fi
 else
@@ -138,22 +138,21 @@ fi
 # Print out some environment information
 environment-info.sh
 
-echo -e "\n--------\n"
-
 # Clone the remote provided git repo and ref
 if [ $use_remote = true ]; then
-    echo "Cloning $git_remote ..."
+    echo -e "\e[0;32mcloning $git_remote ...\e[0m"
     git clone --quiet --depth=50 $git_remote ${workspace_path}
+    echo ""
 
     cd ${workspace_path}
 
-    echo "Fetching $git_ref ..."
+    echo -e "\e[0;32mfetching $git_ref ...\e[0m"
     git fetch --quiet origin +$git_ref:
+    echo ""
 
-    echo "Checking out $git_ref ..."
+    echo -e "\e[0;32mchecking out $git_ref ...\e[0m"
     git checkout --quiet --force FETCH_HEAD
-
-    echo -e "\n--------\n"
+    echo ""
 fi
 
 # Make sure build-deb.sh script exists before going any further
@@ -163,12 +162,12 @@ if [ ! -f "${workspace_path}/packaging/build-deb.sh" ]; then
 fi
 
 # convert LONG flags to SHORT flags for anything prior 4.12.x.x
-echo "Detecting CloudStack version ..."
+echo -e "\e[0;32mdetecting CloudStack version ...\e[0m"
 pom_version=$(cd ${workspace_path}; mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
 echo "${pom_version}"
 major_version=$(echo ${pom_version} | cut -d. -f1)
 minor_version=$(echo ${pom_version} | cut -d. -f2)
-echo -e "\n--------\n"
+echo ""
 
 if [ $major_version -lt 4 ] || [ $major_version -eq 4 -a $minor_version -lt 12 ]; then
     if [ $show_help = true ]; then
@@ -222,6 +221,8 @@ function adjust_owner() {
 
 {
     cd ${workspace_path}/packaging
+
+    echo -e "\e[0;32mpackaging CloudStack DEB packages ...\e[0m"
 
     # do the packaging
     bash -x ./build-deb.sh $@ && {
