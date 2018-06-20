@@ -22,6 +22,7 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
         make \
         locate \
+        wget \
         tar \
         lsb-release \
         build-essential \

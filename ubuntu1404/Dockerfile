@@ -26,6 +26,7 @@ RUN apt-get update -y && \
         make \
         locate \
         tar \
+        wget \
         lsb-release \
         build-essential \
         dpkg-dev \
