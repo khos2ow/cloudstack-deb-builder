@@ -26,6 +26,7 @@ RUN apt-get update -y && \
         make \
         locate \
         tar \
+        wget \
         lsb-release \
         build-essential \
         dpkg-dev \
@@ -33,7 +34,6 @@ RUN apt-get update -y && \
         debhelper \
         genisoimage \
         git \
-        maven \
         openjdk-8-jdk \
         python \
         python-mysqldb \
@@ -47,6 +47,17 @@ RUN apt-get update -y && \
     update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+# maven
+ENV MAVEN_VERSION 3.5.2
+ENV MAVEN_HOME /usr/lib/mvn
+ENV PATH ${PATH}:${MAVEN_HOME}/bin
+
+RUN cd /usr/local && \
+	wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+	tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+	rm -f apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+	mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
 
 VOLUME /mnt/build
 WORKDIR /mnt/build
