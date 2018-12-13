@@ -1,6 +1,6 @@
 # CloudStack DEB Package builder using Docker
 
-[![Build Status](https://travis-ci.com/khos2ow/cloudstack-deb-builder.svg?branch=master)](https://travis-ci.com/khos2ow/cloudstack-deb-builder)
+[![CircleCI Build Status](https://circleci.com/gh/khos2ow/cloudstack-deb-builder.svg?style=svg)](https://circleci.com/gh/khos2ow/cloudstack-deb-builder)
 [![Docker Automated build](https://img.shields.io/docker/automated/khos2ow/cloudstack-deb-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-deb-builder/)
 [![Docker Build Status](https://img.shields.io/docker/build/khos2ow/cloudstack-deb-builder.svg)](https://hub.docker.com/r/khos2ow/cloudstack-deb-builder/builds/)
 [![license](https://img.shields.io/github/license/khos2ow/cloudstack-deb-builder.svg)](https://github.com/khos2ow/cloudstack-deb-builder/blob/master/LICENSE)
