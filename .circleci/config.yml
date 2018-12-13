@@ -1,0 +1,86 @@
+defaults: &defaults
+  machine:
+    services:
+      - docker
+  steps:
+  - checkout
+  - run:
+      name: "Setup required directories"
+      command: |
+        mkdir -p /tmp/apache-cloudstack
+        mkdir -p /tmp/.m2
+  - restore_cache:
+      key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+  - run:
+      name: "Build Docker image"
+      command: make ${TAG}
+  - run:
+      name: "Test Docker image"
+      command: |
+        docker run \
+          --volume /tmp/apache-cloudstack:/mnt/build \
+          --volume /tmp/.m2:/root/.m2 \
+          --rm \
+          ${IMAGE}:${TAG} \
+            --git-remote https://github.com/apache/cloudstack.git \
+            --git-ref refs/heads/master \
+            --remove-first \
+            ${PARAMS}
+  - save_cache:
+      key: repo-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-m2
+      paths:
+        - /tmp/.m2
+
+version: 2
+jobs:
+  ubuntu1404:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-deb-builder
+      TAG: ubuntu1404
+      PARAMS: ""
+
+  ubuntu1604:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-deb-builder
+      TAG: ubuntu1604
+      PARAMS: ""
+
+  ubuntu1804:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-deb-builder
+      TAG: ubuntu1804
+      PARAMS: ""
+
+  latest:
+    <<: *defaults
+    environment:
+      IMAGE: khos2ow/cloudstack-deb-builder
+      TAG: latest
+      PARAMS: ""
+
+workflows:
+  version: 2
+  build:
+    jobs:
+    - ubuntu1404:
+        filters:
+          tags:
+            only: /v.*/
+
+    - ubuntu1604:
+        filters:
+          tags:
+            only: /v.*/
+
+    - ubuntu1804:
+        filters:
+          tags:
+            only: /v.*/
+
+    - latest:
+        filters:
+          tags:
+            only: /v.*/
