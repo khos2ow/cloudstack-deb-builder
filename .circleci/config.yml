@@ -38,28 +38,28 @@ jobs:
     environment:
       IMAGE: khos2ow/cloudstack-deb-builder
       TAG: ubuntu1404
-      PARAMS: 
+      PARAMS: ""
 
   ubuntu1604:
     <<: *defaults
     environment:
       IMAGE: khos2ow/cloudstack-deb-builder
       TAG: ubuntu1604
-      PARAMS: 
+      PARAMS: ""
 
   ubuntu1804:
     <<: *defaults
     environment:
       IMAGE: khos2ow/cloudstack-deb-builder
       TAG: ubuntu1804
-      PARAMS: 
+      PARAMS: ""
 
   latest:
     <<: *defaults
     environment:
       IMAGE: khos2ow/cloudstack-deb-builder
       TAG: latest
-      PARAMS: 
+      PARAMS: ""
 
 workflows:
   version: 2
