@@ -80,7 +80,7 @@ workflows:
 
     - test:
         name: test-ubuntu1804
-        tag: ubuntu1604
+        tag: ubuntu1804
         ref: refs/heads/master
         param: ""
         filters:
