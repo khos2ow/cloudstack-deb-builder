@@ -81,7 +81,16 @@ workflows:
     - test:
         name: test-ubuntu1804
         tag: ubuntu1804
-        ref: refs/heads/master
+        ref: refs/heads/4.13
+        param: ""
+        filters:
+          branches:
+            ignore: master
+    
+    - test:
+        name: test-ubuntu1804-jdk11
+        tag: ubuntu1804-jdk11
+        ref: refs/heads/4.15
         param: ""
         filters:
           branches:
@@ -106,6 +115,13 @@ workflows:
     - push:
         name: push-ubuntu1804
         tag: ubuntu1804
+        filters:
+          branches:
+            only: master
+    
+    - push:
+        name: push-ubuntu1804-jdk11
+        tag: ubuntu1804-jdk11
         filters:
           branches:
             only: master
