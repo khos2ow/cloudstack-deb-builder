@@ -36,7 +36,12 @@ RUN apt-get update -y && \
         python-mysqldb \
         python-mysql.connector \
         dh-systemd \
-        python-setuptools && \
+        python-setuptools \
+        curl \
+        sudo && \
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - && \
+    apt-get install -y --no-install-recommends \
+        nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     update-java-alternatives -s java-1.11.0-openjdk-amd64
