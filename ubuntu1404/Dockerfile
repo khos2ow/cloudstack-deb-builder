@@ -53,5 +53,6 @@ WORKDIR /mnt/build
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY environment-info.sh /usr/local/bin/environment-info.sh
+COPY settings.xml /etc/maven/settings.xml
 
 ENTRYPOINT ["docker-entrypoint.sh"]
