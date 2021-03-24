@@ -15,13 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 LABEL maintainer="Khosrow Moossavi <me@khosrow.io> (@khos2ow)"
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository -y ppa:openjdk-r/ppa && \
-    apt-get update -y && \
     apt-get install -y --no-install-recommends \
         make \
         locate \
@@ -34,25 +31,27 @@ RUN apt-get update -y && \
         genisoimage \
         git \
         maven \
-        openjdk-8-jdk \
+        openjdk-11-jdk \
         python \
         python-mysqldb \
         python-mysql.connector \
         dh-systemd \
-        python-setuptools && \
+        python-setuptools \
+        curl \
+        sudo && \
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - && \
+    apt-get install -y --no-install-recommends \
+        nodejs && \
     apt-get clean && \
-    apt-get purge -y software-properties-common && \
-    apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
-    update-java-alternatives -s java-1.8.0-openjdk-amd64
+    update-java-alternatives -s java-1.11.0-openjdk-amd64
 
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 VOLUME /mnt/build
 WORKDIR /mnt/build
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY environment-info.sh /usr/local/bin/environment-info.sh
-COPY settings.xml /etc/maven/settings.xml
 
 ENTRYPOINT ["docker-entrypoint.sh"]

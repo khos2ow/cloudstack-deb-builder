@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-.PHONY: all ubuntu1404 ubuntu1604 ubuntu1804 latest
+.PHONY: all ubuntu1404 ubuntu1604 ubuntu1804 ubuntu1804-jdk11 latest
 
 # Build docker tag based on provided info
 #
@@ -35,6 +35,9 @@ ubuntu1604:
 
 ubuntu1804:
 	$(call build_tag,ubuntu1804,ubuntu1804)
+
+ubuntu1804-jdk11:
+	$(call build_tag,ubuntu1804-jdk11,ubuntu1804-jdk11)
 
 latest:
 	$(call build_tag,latest,ubuntu1804)
