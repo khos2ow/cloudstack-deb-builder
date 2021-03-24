@@ -1,0 +1,132 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+
+jobs:
+  ubuntu1404:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build ubuntu1404
+        run: make ubuntu1404
+
+      - name: Test ubuntu1404
+        if: "!contains(github.ref, 'refs/heads/master')"
+        run: ./scripts/test.sh ubuntu1404 refs/heads/4.13 ""
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push ubuntu1404
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        run: DOCKER_TAG=ubuntu1404 make push
+
+  ubuntu1604:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build ubuntu1604
+        run: make ubuntu1604
+
+      - name: Test ubuntu1604
+        if: "!contains(github.ref, 'refs/heads/master')"
+        run: ./scripts/test.sh ubuntu1604 refs/heads/4.13 ""
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push ubuntu1604
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        run: DOCKER_TAG=ubuntu1604 make push
+
+  ubuntu1804:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build ubuntu1804
+        run: make ubuntu1804
+
+      - name: Test ubuntu1804
+        if: "!contains(github.ref, 'refs/heads/master')"
+        run: ./scripts/test.sh ubuntu1804 refs/heads/4.13 ""
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push ubuntu1804
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        run: DOCKER_TAG=ubuntu1804 make push
+
+  ubuntu1804-jdk11:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build ubuntu1804-jdk11
+        run: make ubuntu1804-jdk11
+
+      - name: Test ubuntu1804-jdk11
+        if: "!contains(github.ref, 'refs/heads/master')"
+        run: ./scripts/test.sh ubuntu1804-jdk11 refs/heads/4.15 ""
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push ubuntu1804-jdk11
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        run: DOCKER_TAG=ubuntu1804-jdk11 make push
+
+  latest:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build latest
+        run: make latest
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        with:
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push latest
+        if: contains(github.ref, 'refs/heads/master') && env.REGISTRY_USERNAME != ''
+        run: DOCKER_TAG=latest make push
