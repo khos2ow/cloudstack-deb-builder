@@ -3,6 +3,7 @@
 # Setup Python2.7 pip
 wget -q --no-check-certificate https://bootstrap.pypa.io/pip/2.7/get-pip.py -O /tmp/get-pip.py
 python2 /tmp/get-pip.py
+ln -s $(which python2) /usr/bin/python
 
 pip2 install MySQL-python
 pip2 install mysql-connector-python

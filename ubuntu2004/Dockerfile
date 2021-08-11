@@ -17,10 +17,13 @@
 
 FROM ubuntu:focal AS base
 
-RUN apt update && apt dist-upgrade -y && apt autoremove --purge -y
+RUN apt update && apt dist-upgrade -y
 
 # Setup main deps for CloudStack
 FROM base AS stage0
+
+# Prevents tzdata from hanging
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN  apt install -y --no-install-recommends \
         wget \
@@ -67,8 +70,12 @@ FROM stage2 AS final
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 RUN apt install -y --no-install-recommends openjdk-11-jdk
-RUN apt clean -y && apt autoremove --purge -y
 
+# Cleanup
+RUN apt clean -y && apt autoremove --purge -y
+RUN rm -rf /var/lib/apt/lists/*
+
+# Setup a final entry point for CloudStack scipts
 VOLUME /mnt/build
 WORKDIR /mnt/build
 
