@@ -16,31 +16,39 @@
 # under the License.
 
 FROM ubuntu:focal AS base
+
 RUN apt update && apt dist-upgrade -y && apt autoremove --purge -y
 
+# Setup main deps for CloudStack
 FROM base AS stage0
+
 RUN  apt install -y --no-install-recommends \
         wget \
-        locate 
-        # make \
-        # tar \
-        # lsb-release \
-        # build-essential \
-        # dpkg-dev \
-        # devscripts \
-        # debhelper \
-        # genisoimage \
-        # git \
-        # maven \
-        # dh-systemd 
+        locate \
+        make \
+        tar \
+        lsb-release \
+        build-essential \
+        dpkg-dev \
+        devscripts \
+        debhelper \
+        genisoimage \
+        git \
+        maven \
+        dh-systemd
 
+# Setup Python2.7
 FROM stage0 AS stage1
+
 RUN  apt install -y \   
         libmysqlclient-dev \
-        python2-minimal
+        python2-minimal \
+        python-setuptools
+
 COPY ./python-deps.sh /
 RUN  ./python-deps.sh
 
+# Setup NodeJS
 FROM stage1 AS stage2
 
 ARG NODE_VERSION=14.17.5
@@ -53,4 +61,18 @@ ENV PATH $NODE_HOME/bin:$PATH
 RUN wget -qO- --no-check-certificate https://nodejs.org/dist/v$NODE_VERSION/$NODE_PACKAGE.tar.gz | tar xzC - -C /opt/
 RUN node --version
 
-RUN echo 'DONE!'
+# Setup JDK and entrypoint
+FROM stage2 AS final 
+
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
+RUN apt install -y --no-install-recommends openjdk-11-jdk
+RUN apt clean -y && apt autoremove --purge -y
+
+VOLUME /mnt/build
+WORKDIR /mnt/build
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY environment-info.sh /usr/local/bin/environment-info.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
