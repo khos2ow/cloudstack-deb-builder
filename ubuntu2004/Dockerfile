@@ -15,47 +15,42 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM ubuntu:focal
+FROM ubuntu:focal AS base
+RUN apt update && apt dist-upgrade -y && apt autoremove --purge -y
 
-RUN apt update 
+FROM base AS stage0
+RUN  apt install -y --no-install-recommends \
+        wget \
+        locate 
+        # make \
+        # tar \
+        # lsb-release \
+        # build-essential \
+        # dpkg-dev \
+        # devscripts \
+        # debhelper \
+        # genisoimage \
+        # git \
+        # maven \
+        # dh-systemd 
+
+FROM stage0 AS stage1
+RUN  apt install -y \   
+        libmysqlclient-dev \
+        python2-minimal
 COPY ./python-deps.sh /
+RUN  ./python-deps.sh
 
-ENTRYPOINT ["./python-deps.sh"]
+FROM stage1 AS stage2
 
-# RUN apt-get update -y && \
-#     apt-get install -y --no-install-recommends \
-#         make \
-#         locate \
-#         tar \
-#         lsb-release \
-#         build-essential \
-#         dpkg-dev \
-#         devscripts \
-#         debhelper \
-#         genisoimage \
-#         git \
-#         maven \
-#         openjdk-11-jdk \
-#         python \
-#         python-mysqldb \
-#         python-mysql.connector \
-#         dh-systemd \
-#         python-setuptools \
-#         curl \
-#         sudo && \
-#     curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - && \
-#     apt-get install -y --no-install-recommends \
-#         nodejs && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/* && \
-#     update-java-alternatives -s java-1.11.0-openjdk-amd64
+ARG NODE_VERSION=14.17.5
+ARG NODE_PACKAGE=node-v$NODE_VERSION-linux-x64
+ARG NODE_HOME=/opt/$NODE_PACKAGE
 
-# ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV NODE_PATH $NODE_HOME/lib/node_modules
+ENV PATH $NODE_HOME/bin:$PATH
 
-# VOLUME /mnt/build
-# WORKDIR /mnt/build
+RUN wget -qO- --no-check-certificate https://nodejs.org/dist/v$NODE_VERSION/$NODE_PACKAGE.tar.gz | tar xzC - -C /opt/
+RUN node --version
 
-# COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-# COPY environment-info.sh /usr/local/bin/environment-info.sh
-
-# ENTRYPOINT ["docker-entrypoint.sh"]
+RUN echo 'DONE!'

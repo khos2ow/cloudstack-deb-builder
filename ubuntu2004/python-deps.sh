@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # Setup Python2.7 pip
-wget --no-check-certificate https://bootstrap.pypa.io/pip/2.7/get-pip.py -O /tmp/get-pip.py
+wget -q --no-check-certificate https://bootstrap.pypa.io/pip/2.7/get-pip.py -O /tmp/get-pip.py
 python2 /tmp/get-pip.py
 
 pip2 install MySQL-python
