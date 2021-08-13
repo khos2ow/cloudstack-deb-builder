@@ -27,8 +27,10 @@ for releases. A very good candidate to be used by the Jenkins slaves of the proj
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest`, `ubuntu1804` (ubuntu1804/Dockerfile)][latest-dockerfile]
+- [`latest`, `ubuntu2004-jdk11` (ubuntu2004-jdk11/Dockerfile)][latest-dockerfile]
+- [`ubuntu2004-jdk11` (ubuntu2004-jdk11/Dockerfile)][ubuntu2004-jdk11-dockerfile]
 - [`ubuntu1804-jdk11` (ubuntu1804-jdk11/Dockerfile)][ubuntu1804-jdk11-dockerfile]
+- [`ubuntu1804` (ubuntu1804/Dockerfile)][ubuntu1804-jdk11-dockerfile]
 - [`ubuntu1604` (ubuntu1604/Dockerfile)][ubuntu1604-dockerfile]
 - [`ubuntu1404` (ubuntu1404/Dockerfile)][ubuntu1404-dockerfile]
 
@@ -57,14 +59,14 @@ required:
 
 ### Pull Docker images
 
-Let's assume we want to build packages for Ubuntu 16.04 (Xenial). We pull that
+Let's assume we want to build packages for Ubuntu 20.04 (Focal). We pull that
 image first:
 
 ```bashe
-docker pull khos2ow/cloudstack-deb-builder:ubuntu1604
+docker pull khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11
 ```
 
-You can replace `ubuntu1604` tag by `ubuntu1804`, `ubuntu1404` or `latest` if
+You can replace `ubuntu2004-jdk11` tag by `ubuntu1804`, `ubuntu1404` or `latest` if
 you want.
 
 ### Build local repository
@@ -92,7 +94,7 @@ always expects the `cloudstack` code exists in `/mnt/build` path.)
 ```bash
 docker run \
     -v /tmp:/mnt/build \
-    khos2ow/cloudstack-deb-builder:ubuntu1604 [ARGS...]
+    khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11 [ARGS...]
 ```
 
 Or if your local cloudstack folder has other name, you need to map it to
@@ -101,7 +103,7 @@ Or if your local cloudstack folder has other name, you need to map it to
 ```bash
 docker run \
     -v /tmp/cloudstack-custom-name:/mnt/build/cloudstack \
-    khos2ow/cloudstack-deb-builder:ubuntu1604 [ARGS...]
+    khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11 [ARGS...]
 ```
 
 After the build has finished the `.deb` packages are available in
@@ -125,7 +127,7 @@ in `/mnt/build/cloudstack` inside the container and can be accessed from
 ```bash
 docker run \
     -v /tmp:/mnt/build \
-    khos2ow/cloudstack-deb-builder:ubuntu1604 \
+    khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11 \
         --git-remote https://github.com/apache/cloudstack.git \
         --git-ref master \
         [ARGS...]
@@ -155,7 +157,7 @@ it run faster.
 docker run \
     -v /tmp:/mnt/build \
     -v ~/.m2:/root/.m2 \
-    khos2ow/cloudstack-deb-builder:ubuntu1604 [ARGS...]
+    khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11 [ARGS...]
 ```
 
 ### Adjust host owner permission
@@ -175,7 +177,7 @@ docker run \
     -v /tmp:/mnt/build \
     -e "USER_ID=$(id -u)" \
     -e "USER_GID=$(id -g)" \
-    khos2ow/cloudstack-deb-builder:ubuntu1604 [ARGS...]
+    khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11 [ARGS...]
 ```
 
 ## Builder help
@@ -185,7 +187,7 @@ To see all the available options you can pass to `docker run ...` command:
 ```bash
 docker run \
     -v /tmp:/mnt/build \
-    khos2ow/cloudstack-deb-builder:ubuntu1604 --help
+    khos2ow/cloudstack-deb-builder:ubuntu2004-jdk11 --help
 ```
 
 ## License
@@ -198,5 +200,6 @@ included in the root directory of the source tree for extended license details.
 [latest-dockerfile]: https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1804/Dockerfile
 [ubuntu1404-dockerfile]: https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1404/Dockerfile
 [ubuntu1604-dockerfile]: https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1604/Dockerfile
+[ubuntu2004-dockerfile]: https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu2004-jdk11/Dockerfile
 [ubuntu1804-jdk11-dockerfile]: https://github.com/khos2ow/cloudstack-deb-builder/blob/master/ubuntu1804-jdk11/Dockerfile
 [https://github.com/apache/cloudstack]: https://github.com/apache/cloudstack
