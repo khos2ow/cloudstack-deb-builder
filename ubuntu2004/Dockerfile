@@ -54,7 +54,7 @@ RUN  ./python-deps.sh
 FROM stage1 AS stage2
 
 #ARG NODE_VERSION=12.22.5
-ARG NODE_VERSION=14.17.5
+ARG NODE_VERSION=14.18.1
 ARG NODE_PACKAGE=node-v$NODE_VERSION-linux-x64
 ARG NODE_HOME=/opt/$NODE_PACKAGE
 
@@ -74,7 +74,7 @@ RUN apt install -y --no-install-recommends openjdk-11-jdk
 # Setup latest Maven
 FROM stage3 AS stage4
 
-ARG MVN_VERSION=3.8.1
+ARG MVN_VERSION=3.8.3
 ARG MVN_PACKAGE=apache-maven-$MVN_VERSION
 ARG MVN_HOME=/opt/$MVN_PACKAGE
 
